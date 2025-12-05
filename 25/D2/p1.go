@@ -8,19 +8,16 @@ import (
 	"strings"
 )
 
-func check_range1(start string, end string, id_sum int, range_map map[int]*Range) int {
-	var r Range
+func check_range1(start string, end string, id_sum int) int {
 	i_start, err := strconv.Atoi(start)
 	if err != nil {
 		log.Fatal(err)
 	}
-	r.start = i_start
 
 	i_end, err := strconv.Atoi(end)
 	if err != nil {
 		log.Fatal(err)
 	}
-	r.end = i_end
 
 	curr := 1
 	s_len := len(start)
@@ -37,14 +34,8 @@ func check_range1(start string, end string, id_sum int, range_map map[int]*Range
 		invalid_id := curr * int(doubler)
 
 		if i_start <= invalid_id && invalid_id <= i_end {
-			_, ok := range_map[i_start]
-			if !ok {
-				range_map[i_start] = &r
-			}
 			fmt.Println(invalid_id)
-			r.invalids++
 			id_sum += invalid_id
-			r.id_sum += invalid_id
 		}
 		curr++
 
@@ -53,15 +44,7 @@ func check_range1(start string, end string, id_sum int, range_map map[int]*Range
 }
 
 func Partq(filename string) {
-	/*
-	* read in file and split ranges into array of Ranges
-	* log start value, start searching for invalid IDs
-	* when invalid is found, log it and log range end
-	* filter out all numbers with an odd length
-	* */
-
 	id_sum := 0
-	range_map := make(map[int]*Range)
 	for pair := range strings.SplitSeq(readline(filename), ",") {
 		fmt.Println(pair)
 
@@ -71,7 +54,7 @@ func Partq(filename string) {
 		if len_s == len_e && len_s&1 == 1 {
 			continue
 		}
-		id_sum = check_range1(start, end, id_sum, range_map)
+		id_sum = check_range1(start, end, id_sum)
 	}
 	fmt.Println(id_sum)
 }

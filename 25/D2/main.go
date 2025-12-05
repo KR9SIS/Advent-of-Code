@@ -6,13 +6,6 @@ import (
 	"os"
 )
 
-type Range struct {
-	start    int
-	end      int
-	invalids int
-	id_sum   int
-}
-
 func readline(filename string) string {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -42,6 +35,6 @@ func count_digits(i int) int {
 
 func main() {
 	filename := "puzzle.txt"
-	filename = "small_puzzle.txt"
+	// filename = "small_puzzle.txt"
 	Part2(filename)
 }
