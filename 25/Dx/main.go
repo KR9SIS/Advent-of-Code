@@ -5,12 +5,11 @@ import (
 	"os"
 )
 
-func Readfile(filename string) *os.File {
+func ReadFile(filename string) *os.File {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
 	return file
 }
 

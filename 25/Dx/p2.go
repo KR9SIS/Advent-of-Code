@@ -1,5 +1,6 @@
 package main
 
 func Part2(filename string) {
-	f := Readfile(filename)
+	// f := ReadFile(filename)
+	// defer f.Close()
 }
