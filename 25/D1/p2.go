@@ -19,9 +19,11 @@ func rotate2(pos int, direction string, amount int) (p int, z int) {
 	switch direction {
 	case "L":
 		pos = pos - amount
-		if pos < 0 && init_pos != 0 {
+		if pos <= 0 {
 			pos = pos + 100
-			zeroes++
+			if init_pos != 0 {
+				zeroes++
+			}
 		}
 	case "R":
 		pos = pos + amount
@@ -62,6 +64,7 @@ func Part2(filename string) {
 		if zeroes != 0 {
 			num_zero += zeroes
 		}
+		fmt.Println("Number of 0 hits:", num_zero)
 	}
 
 	// Check for errors during the scan
