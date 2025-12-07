@@ -16,5 +16,5 @@ func ReadFile(filename string) *os.File {
 func main() {
 	filename := "puzzle.txt"
 	// filename = "small_puzzle.txt"
-	Part1(filename)
+	Part2(filename)
 }
