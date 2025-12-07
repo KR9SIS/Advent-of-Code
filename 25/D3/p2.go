@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"container/heap"
 	"fmt"
 	"log"
 )
@@ -10,37 +11,52 @@ func Part2(filename string) {
 	f := ReadFile(filename)
 	defer f.Close()
 
+	const window_size = 12
 	ret := 0
-
 	line_num := 0
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line_num++
 		fmt.Println("Line", line_num)
 		line := scanner.Text() // Read one line
-		b1, b1_idx, b2, b2_idx := 0, 0, 0, 0
-		for i := 0; i < len(line); i++ {
+
+		min_heap := &IntMinHeap{}
+		heap.Init(min_heap)
+		var arr [window_size]int
+
+		fmt.Println(line)
+		for i := range window_size {
 			num := int(line[i] - '0')
-			if b1 < num {
-				if i == len(line)-1 {
-					b2, b2_idx = b1, b1_idx
-					b1, b1_idx = num, i
-				} else {
-					b2, b2_idx = 0, 0
-					b1, b1_idx = num, i
+			heap.Push(min_heap, num)
+			arr[i] = num
+		}
+
+		for i := window_size; i < len(line); i++ {
+			num := int(line[i] - '0')
+			min_num := min_heap.Peek()
+			if num > min_num {
+				min_heap.Put(0, num)
+
+				idx := 0
+				for j := range arr {
+					if arr[j] == min_num {
+						idx = j
+						break
+					}
 				}
-			} else if b2 < num {
-				b2, b2_idx = num, i
+				for j := idx; j < len(arr)-1; j++ {
+					arr[j] = arr[j+1]
+				}
+				arr[len(arr)-1] = num
 			}
 		}
-		energy := 0
-		if b1_idx < b2_idx {
-			energy = ((b1 * 10) + b2)
-		} else {
-			energy = ((b2 * 10) + b1)
+		fmt.Printf("Min: %v\nHeap: %v\nArr:   %v\n", min_heap.Peek(), min_heap, arr)
+		sum := 0
+		for _, num := range arr {
+			sum = sum*10 + num
 		}
-		fmt.Printf("b1: %v, b2: %v, energy %v\n", b1, b2, energy)
-		ret += energy
+		fmt.Printf("Sum: %v\n\n", sum)
+		ret += sum
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(ret, "\n", err)
@@ -48,3 +64,18 @@ func Part2(filename string) {
 
 	fmt.Println(ret)
 }
+
+/* INFO:
+*  Line 1
+*  987654321111 c
+*  987654321111 c
+*  Line 2
+*  811111111119 c
+*  811111111119 c
+*  Line 3
+*  343423423478 x
+*  4 34234234278 c
+*  Line 4
+*  818181911112 x
+*  888911112111 c
+* */
