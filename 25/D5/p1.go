@@ -37,18 +37,15 @@ func Part1(filename string) {
 			log.Fatal(err)
 		}
 		ranges = append(ranges, Range{s, e})
-		// fmt.Println(line)
 	}
 
 	slices.SortFunc(ranges, func(a, b Range) int {
-		if a.start == b.start {
-			// put larger range first
-			return b.end - a.end
-		}
 		return a.start - b.start
 	})
-	fmt.Println(len(ranges))
 
+	for _, r := range ranges {
+		fmt.Println(r)
+	}
 	for scanner.Scan() {
 		line := scanner.Text()
 
@@ -56,26 +53,14 @@ func Part1(filename string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		// fmt.Println(id)
-		idx, _ := slices.BinarySearchFunc(ranges, Range{id, id}, func(a, b Range) int {
-			return a.start - b.start
-		})
-		if idx != 0 {
-			// fmt.Println(ranges[idx : idx+3])
-			idx--
-		}
-		for i := idx; i < idx+3; i++ {
-			r := ranges[idx]
+
+		for i := range ranges {
+			r := ranges[i]
 			if r.start <= id && id <= r.end {
-				fmt.Println("ID:", id, "\nin r:", ranges[idx])
 				ret++
 				break
 			}
 		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
 	}
 	fmt.Println("Fresh IDs:", ret)
 }
